@@ -3,7 +3,7 @@ import 'package:currency_converter_app/core/constants/api_constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HomeRepository {
+class ConvertorRepository {
   // Fetch all currencies with exchange rates
   Future<Map<String, double>> fetchAllCurrencies() async {
     final url = Uri.parse("${ApiConstants.baseUrl}?base=EUR&access_key=${ApiConstants.apiKey}");

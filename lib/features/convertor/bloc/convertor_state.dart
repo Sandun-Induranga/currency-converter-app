@@ -1,4 +1,4 @@
-class HomeState {
+class ConvertorState {
   final Map<String, double> currencies;
   final List<String> preferredCurrencies;
   final bool isLoading;
@@ -6,7 +6,7 @@ class HomeState {
   final double amount;
   final String selectedBaseCurrency;
 
-  HomeState({
+  ConvertorState({
     required this.currencies,
     required this.preferredCurrencies,
     required this.isLoading,
@@ -15,7 +15,7 @@ class HomeState {
     required this.selectedBaseCurrency,
   });
 
-  factory HomeState.initial() => HomeState(
+  factory ConvertorState.initial() => ConvertorState(
     currencies: {},
     preferredCurrencies: [],
     isLoading: false,
@@ -24,7 +24,7 @@ class HomeState {
     selectedBaseCurrency: 'USD',
   );
 
-  HomeState copyWith({
+  ConvertorState copyWith({
     Map<String, double>? currencies,
     List<String>? preferredCurrencies,
     bool? isLoading,
@@ -32,7 +32,7 @@ class HomeState {
     double? amount,
     String? selectedBaseCurrency,
   }) {
-    return HomeState(
+    return ConvertorState(
       currencies: currencies ?? this.currencies,
       preferredCurrencies: preferredCurrencies ?? this.preferredCurrencies,
       isLoading: isLoading ?? this.isLoading,

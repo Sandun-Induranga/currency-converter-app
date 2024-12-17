@@ -1,13 +1,14 @@
 import 'package:bloc/bloc.dart';
-import 'package:currency_converter_app/features/home/bloc/home_event.dart';
-import 'package:currency_converter_app/features/home/bloc/home_state.dart';
-import 'package:currency_converter_app/features/home/data/home_repository.dart';
 
-class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  final HomeRepository homeRepository = HomeRepository();
+import '../data/convertor_repository.dart';
+import 'convertor_event.dart';
+import 'convertor_state.dart';
 
-  HomeBloc() : super(HomeState.initial()) {
-    on<HomeEvent>((event, emit) async => switch (event) {
+class ConvertorBloc extends Bloc<ConvertorEvent, ConvertorState> {
+  final ConvertorRepository convertorRepository = ConvertorRepository();
+
+  ConvertorBloc() : super(ConvertorState.initial()) {
+    on<ConvertorEvent>((event, emit) async => switch (event) {
           GetAllCurrencies() => _getAllCurrencies(event, emit),
           AddPreferredCurrency() => _addPreferredCurrency(event, emit),
           DeletePreferredCurrency() => _deletePreferredCurrency(event, emit),
@@ -21,10 +22,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   // Fetch all currencies from API
   Future<void> _getAllCurrencies(
-      GetAllCurrencies event, Emitter<HomeState> emit) async {
+      GetAllCurrencies event, Emitter<ConvertorState> emit) async {
     emit(state.copyWith(isLoading: true, error: null));
     try {
-      final currencies = await homeRepository.fetchAllCurrencies();
+      final currencies = await convertorRepository.fetchAllCurrencies();
       emit(state.copyWith(currencies: currencies, isLoading: false));
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
@@ -33,7 +34,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   // Add a preferred currency
   Future<void> _addPreferredCurrency(
-      AddPreferredCurrency event, Emitter<HomeState> emit) async {
+      AddPreferredCurrency event, Emitter<ConvertorState> emit) async {
     if (!state.preferredCurrencies.contains(event.currency)) {
       try {
         final updatedCurrencies = [
@@ -41,7 +42,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           event.currency
         ];
         emit(state.copyWith(preferredCurrencies: updatedCurrencies));
-        await homeRepository.updatePreferredCurrencies(updatedCurrencies);
+        await convertorRepository.updatePreferredCurrencies(updatedCurrencies);
       } catch (e) {
         emit(state.copyWith(error: e.toString()));
       }
@@ -50,28 +51,28 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   // Delete a preferred currency
   Future<void> _deletePreferredCurrency(
-      DeletePreferredCurrency event, Emitter<HomeState> emit) async {
+      DeletePreferredCurrency event, Emitter<ConvertorState> emit) async {
     try {
       final updatedCurrencies = state.preferredCurrencies
           .where((currency) => currency != event.currency)
           .toList();
       emit(state.copyWith(preferredCurrencies: updatedCurrencies));
-      await homeRepository.updatePreferredCurrencies(updatedCurrencies);
+      await convertorRepository.updatePreferredCurrencies(updatedCurrencies);
     } catch (e) {
       emit(state.copyWith(error: e.toString()));
     }
   }
 
   // Update the amount
-  void _updateAmount(UpdateAmount event, Emitter<HomeState> emit) {
+  void _updateAmount(UpdateAmount event, Emitter<ConvertorState> emit) {
     emit(state.copyWith(amount: event.amount));
   }
 
   // Load preferred currencies from local storage
   Future<void> _loadPreferredCurrencies(
-      GetAllPreferredCurrencies event, Emitter<HomeState> emit) async {
+      GetAllPreferredCurrencies event, Emitter<ConvertorState> emit) async {
     try {
-      final storedCurrencies = await homeRepository.loadPreferredCurrencies();
+      final storedCurrencies = await convertorRepository.loadPreferredCurrencies();
       emit(state.copyWith(preferredCurrencies: storedCurrencies));
     } catch (e) {
       emit(state.copyWith(error: e.toString()));
@@ -79,7 +80,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   // Update the base currency
-  void _updateBaseCurrency(UpdateBaseCurrency event, Emitter<HomeState> emit) {
+  void _updateBaseCurrency(UpdateBaseCurrency event, Emitter<ConvertorState> emit) {
     emit(state.copyWith(selectedBaseCurrency: event.currency));
   }
 }

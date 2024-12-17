@@ -1,9 +1,13 @@
-import 'package:currency_converter_app/features/home/bloc/home_state.dart';
+import 'package:currency_converter_app/core/constants/app_paddings.dart';
+import 'package:currency_converter_app/core/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../bloc/home_bloc.dart';
-import '../../bloc/home_event.dart';
+import '../../../../core/constants/color_codes.dart';
+import '../../bloc/convertor_bloc.dart';
+import '../../bloc/convertor_event.dart';
+import '../../bloc/convertor_state.dart';
 
 class BaseCurrencyWidget extends StatelessWidget {
   const BaseCurrencyWidget({super.key});
@@ -11,7 +15,7 @@ class BaseCurrencyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.symmetric(horizontal: AppPaddings.p12.w),
       decoration: BoxDecoration(
         color: Colors.grey[850],
         borderRadius: BorderRadius.circular(8),
@@ -21,20 +25,21 @@ class BaseCurrencyWidget extends StatelessWidget {
           Expanded(
             child: TextField(
               keyboardType: TextInputType.number,
-              style: const TextStyle(color: Colors.white),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: "Enter amount",
-                hintStyle: TextStyle(color: Colors.grey),
+                hintStyle: context.theme.textTheme.titleMedium!.copyWith(
+                  color: ColorCodes.accentColor.withOpacity(0.5),
+                ),
                 border: InputBorder.none,
               ),
               onChanged: (value) {
-                context.read<HomeBloc>().add(
+                context.read<ConvertorBloc>().add(
                       UpdateAmount(double.tryParse(value) ?? 0),
                     );
               },
             ),
           ),
-          BlocBuilder<HomeBloc, HomeState>(
+          BlocBuilder<ConvertorBloc, ConvertorState>(
               buildWhen: (previous, current) =>
                   previous.selectedBaseCurrency !=
                       current.selectedBaseCurrency ||
@@ -42,8 +47,7 @@ class BaseCurrencyWidget extends StatelessWidget {
               builder: (context, state) {
                 return DropdownButton<String>(
                   value: state.selectedBaseCurrency,
-                  dropdownColor: Colors.grey[800],
-                  style: const TextStyle(color: Colors.white),
+                  dropdownColor: ColorCodes.secondaryColor,
                   underline: const SizedBox(),
                   items: state.currencies.keys.map((currency) {
                     return DropdownMenuItem(
@@ -52,7 +56,9 @@ class BaseCurrencyWidget extends StatelessWidget {
                     );
                   }).toList(),
                   onChanged: (value) {
-                    context.read<HomeBloc>().add(UpdateBaseCurrency(value!));
+                    context.read<ConvertorBloc>().add(
+                          UpdateBaseCurrency(value!),
+                        );
                   },
                 );
               }),

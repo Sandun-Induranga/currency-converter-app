@@ -1,11 +1,11 @@
-import 'package:currency_converter_app/features/home/bloc/home_provider.dart';
-import 'package:currency_converter_app/features/home/presentation/screens/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'config/theme/app_theme.dart';
+import 'features/convertor/bloc/convertor_provider.dart';
+import 'features/convertor/presentation/screens/convertor_view.dart';
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
@@ -27,7 +27,7 @@ class MainApp extends StatelessWidget {
       builder: (context, child) {
         return MultiBlocProvider(
           providers: [
-            HomeProvider(),
+            ConvertorProvider(),
           ],
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
@@ -37,7 +37,7 @@ class MainApp extends StatelessWidget {
           ),
         );
       },
-      child: HomeView(),
+      child: const ConvertorView(),
     );
   }
 }
