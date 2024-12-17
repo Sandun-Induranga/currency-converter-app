@@ -35,20 +35,31 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<void> _addPreferredCurrency(
       AddPreferredCurrency event, Emitter<HomeState> emit) async {
     if (!state.preferredCurrencies.contains(event.currency)) {
-      final updatedCurrencies = [...state.preferredCurrencies, event.currency];
-      emit(state.copyWith(preferredCurrencies: updatedCurrencies));
-      await homeRepository.updatePreferredCurrencies(updatedCurrencies);
+      try {
+        final updatedCurrencies = [
+          ...state.preferredCurrencies,
+          event.currency
+        ];
+        emit(state.copyWith(preferredCurrencies: updatedCurrencies));
+        await homeRepository.updatePreferredCurrencies(updatedCurrencies);
+      } catch (e) {
+        emit(state.copyWith(error: e.toString()));
+      }
     }
   }
 
   // Delete a preferred currency
   Future<void> _deletePreferredCurrency(
       DeletePreferredCurrency event, Emitter<HomeState> emit) async {
-    final updatedCurrencies = state.preferredCurrencies
-        .where((currency) => currency != event.currency)
-        .toList();
-    emit(state.copyWith(preferredCurrencies: updatedCurrencies));
-    await homeRepository.updatePreferredCurrencies(updatedCurrencies);
+    try {
+      final updatedCurrencies = state.preferredCurrencies
+          .where((currency) => currency != event.currency)
+          .toList();
+      emit(state.copyWith(preferredCurrencies: updatedCurrencies));
+      await homeRepository.updatePreferredCurrencies(updatedCurrencies);
+    } catch (e) {
+      emit(state.copyWith(error: e.toString()));
+    }
   }
 
   // Update the amount
@@ -59,8 +70,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   // Load preferred currencies from local storage
   Future<void> _loadPreferredCurrencies(
       GetAllPreferredCurrencies event, Emitter<HomeState> emit) async {
-    final storedCurrencies = await homeRepository.loadPreferredCurrencies();
-    emit(state.copyWith(preferredCurrencies: storedCurrencies));
+    try {
+      final storedCurrencies = await homeRepository.loadPreferredCurrencies();
+      emit(state.copyWith(preferredCurrencies: storedCurrencies));
+    } catch (e) {
+      emit(state.copyWith(error: e.toString()));
+    }
   }
 
   // Update the base currency

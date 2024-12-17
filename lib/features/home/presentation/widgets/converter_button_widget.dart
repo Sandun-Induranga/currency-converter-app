@@ -1,3 +1,4 @@
+import 'package:currency_converter_app/core/utils/extensions.dart';
 import 'package:currency_converter_app/features/home/bloc/home_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,9 +22,9 @@ class ConverterButtonWidget extends StatelessWidget {
           showAddConverterDialog(
               context, context.read<HomeBloc>().state.currencies.keys.toList());
         },
-        child: const Text(
+        child: Text(
           "+ ADD CONVERTER",
-          style: TextStyle(color: Colors.white),
+          style: context.theme.textTheme.titleSmall,
         ),
       ),
     );

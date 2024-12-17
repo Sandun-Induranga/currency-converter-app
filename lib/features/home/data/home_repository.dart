@@ -1,14 +1,12 @@
 import 'dart:convert';
+import 'package:currency_converter_app/core/constants/api_constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeRepository {
-  final String baseUrl = "https://api.exchangerate.host/latest";
-  final String apiKey = "de201448ea08c8eb4532904c0c756f00";
-
   // Fetch all currencies with exchange rates
   Future<Map<String, double>> fetchAllCurrencies() async {
-    final url = Uri.parse("$baseUrl?base=EUR&access_key=$apiKey");
+    final url = Uri.parse("${ApiConstants.baseUrl}?base=EUR&access_key=${ApiConstants.apiKey}");
 
     final response = await http.get(url);
 
