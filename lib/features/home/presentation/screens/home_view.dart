@@ -1,4 +1,7 @@
+import 'package:currency_converter_app/core/constants/app_paddings.dart';
+import 'package:currency_converter_app/core/widgets/gap_widgets/vertical_gap_consistent.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -32,7 +35,7 @@ class _HomeViewState extends State<HomeView> {
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 20),
+            VerticalGapWidget(AppPaddings.p20.h),
             const Text(
               "Select Input Currency:",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
@@ -49,7 +52,7 @@ class _HomeViewState extends State<HomeView> {
               }).toList(),
               onChanged: (value) {},
             ),
-            const SizedBox(height: 20),
+            VerticalGapWidget(AppPaddings.p20.h),
             const Text(
               "Preferred Target Currencies:",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
