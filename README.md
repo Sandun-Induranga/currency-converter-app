@@ -4,7 +4,7 @@
 
 ## Description
 
-This is a simple currency exchanger that uses the [ExchangeRate-API](https://www.exchangerate-api.com/) to get the latest exchange rates. It is built using Python and the Tkinter library for the GUI.
+This is a simple currency exchanger that uses the [ExchangeRate-API](https://www.exchangerate-api.com/) to get the latest exchange rates. It is built using the Flutter framework and the Bloc state management pattern.
 
 ## Features
 
@@ -56,14 +56,14 @@ Testability:
 3. Dynamic UI:
     - Users can:
         - Input an amount.
-          - Select a base currency.
-          - Add/remove preferred currencies dynamically.
+        - Select a base currency.
+        - Add/remove preferred currencies dynamically.
 
 ## Key Files and Folders
 
 1. convertor_bloc.dart: Manages the state of the Convertor feature.
-2. convertor_repository.dart: Fetches exchange rates from the API.
-3. api_constants.dart: Contains the API URL and key.
+2. convertor_repository.dart: Fetches exchange rates from the API and manage preferred currencies.
+3. api_constants.dart: Contains the Base URL and key.
 4. convertor_view.dart: UI for the Convertor feature.
 5. core: Contains shared constants, utilities, and widgets.
 6. main.dart: Entry point of the app.
