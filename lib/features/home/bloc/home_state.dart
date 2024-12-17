@@ -4,6 +4,7 @@ class HomeState {
   final bool isLoading;
   final String? error;
   final double amount;
+  final String selectedBaseCurrency;
 
   HomeState({
     required this.currencies,
@@ -11,6 +12,7 @@ class HomeState {
     required this.isLoading,
     this.error,
     required this.amount,
+    required this.selectedBaseCurrency,
   });
 
   factory HomeState.initial() => HomeState(
@@ -19,6 +21,7 @@ class HomeState {
     isLoading: false,
     error: null,
     amount: 0,
+    selectedBaseCurrency: 'USD',
   );
 
   HomeState copyWith({
@@ -27,6 +30,7 @@ class HomeState {
     bool? isLoading,
     String? error,
     double? amount,
+    String? selectedBaseCurrency,
   }) {
     return HomeState(
       currencies: currencies ?? this.currencies,
@@ -34,6 +38,7 @@ class HomeState {
       isLoading: isLoading ?? this.isLoading,
       error: error,
       amount: amount ?? this.amount,
+      selectedBaseCurrency: selectedBaseCurrency ?? this.selectedBaseCurrency,
     );
   }
 }

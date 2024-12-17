@@ -13,6 +13,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           DeletePreferredCurrency() => _deletePreferredCurrency(event, emit),
           UpdateAmount() => _updateAmount(event, emit),
           GetAllPreferredCurrencies() => _loadPreferredCurrencies(event, emit),
+          UpdateBaseCurrency() => _updateBaseCurrency(event, emit),
         });
     add(GetAllCurrencies());
     add(GetAllPreferredCurrencies());
@@ -60,5 +61,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       GetAllPreferredCurrencies event, Emitter<HomeState> emit) async {
     final storedCurrencies = await homeRepository.loadPreferredCurrencies();
     emit(state.copyWith(preferredCurrencies: storedCurrencies));
+  }
+
+  // Update the base currency
+  void _updateBaseCurrency(UpdateBaseCurrency event, Emitter<HomeState> emit) {
+    emit(state.copyWith(selectedBaseCurrency: event.currency));
   }
 }

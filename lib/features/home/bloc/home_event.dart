@@ -26,3 +26,10 @@ class UpdateAmount extends HomeEvent {
 
 // Event to load preferred currencies
 class GetAllPreferredCurrencies extends HomeEvent {}
+
+// Event to update the base currency
+class UpdateBaseCurrency extends HomeEvent {
+  final String currency;
+
+  UpdateBaseCurrency(this.currency);
+}

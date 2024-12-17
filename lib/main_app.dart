@@ -37,7 +37,7 @@ class MainApp extends StatelessWidget {
           ),
         );
       },
-      child: const HomeView(),
+      child: HomeView(),
     );
   }
 }
