@@ -23,3 +23,6 @@ class UpdateAmount extends HomeEvent {
 
   UpdateAmount(this.amount);
 }
+
+// Event to load preferred currencies
+class GetAllPreferredCurrencies extends HomeEvent {}

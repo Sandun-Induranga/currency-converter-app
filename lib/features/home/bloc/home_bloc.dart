@@ -12,7 +12,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           AddPreferredCurrency() => _addPreferredCurrency(event, emit),
           DeletePreferredCurrency() => _deletePreferredCurrency(event, emit),
           UpdateAmount() => _updateAmount(event, emit),
+          GetAllPreferredCurrencies() => _loadPreferredCurrencies(event, emit),
         });
+    add(GetAllCurrencies());
+    add(GetAllPreferredCurrencies());
   }
 
   // Fetch all currencies from API
@@ -20,35 +23,42 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       GetAllCurrencies event, Emitter<HomeState> emit) async {
     emit(state.copyWith(isLoading: true, error: null));
     try {
-      final currencies =
-          await homeRepository.fetchAllCurrencies();
+      final currencies = await homeRepository.fetchAllCurrencies();
       emit(state.copyWith(currencies: currencies, isLoading: false));
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
-      print(e);
     }
   }
 
   // Add a preferred currency
-  void _addPreferredCurrency(
-      AddPreferredCurrency event, Emitter<HomeState> emit) {
+  Future<void> _addPreferredCurrency(
+      AddPreferredCurrency event, Emitter<HomeState> emit) async {
     if (!state.preferredCurrencies.contains(event.currency)) {
-      emit(state.copyWith(
-          preferredCurrencies: [...state.preferredCurrencies, event.currency]));
+      final updatedCurrencies = [...state.preferredCurrencies, event.currency];
+      emit(state.copyWith(preferredCurrencies: updatedCurrencies));
+      await homeRepository.updatePreferredCurrencies(updatedCurrencies);
     }
   }
 
   // Delete a preferred currency
-  void _deletePreferredCurrency(
-      DeletePreferredCurrency event, Emitter<HomeState> emit) {
-    emit(state.copyWith(
-        preferredCurrencies: state.preferredCurrencies
-            .where((currency) => currency != event.currency)
-            .toList()));
+  Future<void> _deletePreferredCurrency(
+      DeletePreferredCurrency event, Emitter<HomeState> emit) async {
+    final updatedCurrencies = state.preferredCurrencies
+        .where((currency) => currency != event.currency)
+        .toList();
+    emit(state.copyWith(preferredCurrencies: updatedCurrencies));
+    await homeRepository.updatePreferredCurrencies(updatedCurrencies);
   }
 
   // Update the amount
   void _updateAmount(UpdateAmount event, Emitter<HomeState> emit) {
     emit(state.copyWith(amount: event.amount));
+  }
+
+  // Load preferred currencies from local storage
+  Future<void> _loadPreferredCurrencies(
+      GetAllPreferredCurrencies event, Emitter<HomeState> emit) async {
+    final storedCurrencies = await homeRepository.loadPreferredCurrencies();
+    emit(state.copyWith(preferredCurrencies: storedCurrencies));
   }
 }

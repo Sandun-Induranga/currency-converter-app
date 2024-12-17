@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeRepository {
   final String baseUrl = "https://api.exchangerate.host/latest";
@@ -25,5 +26,17 @@ class HomeRepository {
     } else {
       throw Exception("Failed to fetch currencies. Status Code: ${response.statusCode}");
     }
+  }
+
+  // Update preferred currencies to local storage
+  Future<void> updatePreferredCurrencies(List<String> currencies) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('preferredCurrencies', currencies);
+  }
+
+  // Load preferred currencies from local storage
+  Future<List<String>> loadPreferredCurrencies() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getStringList('preferredCurrencies') ?? [];
   }
 }

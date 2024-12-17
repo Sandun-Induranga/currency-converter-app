@@ -38,6 +38,7 @@ dependencies:
   flutter_screenutil: ^5.9.3
   flutter_bloc: ^8.1.6
   http: ^1.2.2
+  shared_preferences: ^2.3.3
 
 dev_dependencies:
   flutter_test:

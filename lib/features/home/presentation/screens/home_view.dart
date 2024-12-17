@@ -19,13 +19,6 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   String _selectedBaseCurrency = "USD";
   final TextEditingController _amountController = TextEditingController();
-  final List<String> _selectedTargetCurrencies = ["IDR", "EUR"];
-
-  @override
-  void initState() {
-    super.initState();
-    context.read<HomeBloc>().add(GetAllCurrencies());
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,9 +100,9 @@ class _HomeViewState extends State<HomeView> {
 
                 Expanded(
                   child: ListView.builder(
-                    itemCount: _selectedTargetCurrencies.length,
+                    itemCount: state.preferredCurrencies.length,
                     itemBuilder: (context, index) {
-                      final targetCurrency = _selectedTargetCurrencies[index];
+                      final targetCurrency = state.preferredCurrencies[index];
 
                       // Calculate the converted value based on the base currency
                       final baseRate =
@@ -154,9 +147,9 @@ class _HomeViewState extends State<HomeView> {
                                   icon: const Icon(Icons.delete,
                                       color: Colors.red),
                                   onPressed: () {
-                                    setState(() {
-                                      _selectedTargetCurrencies.removeAt(index);
-                                    });
+                                    context.read<HomeBloc>().add(
+                                      DeletePreferredCurrency(targetCurrency),
+                                    );
                                   },
                                 ),
                               ],
@@ -178,10 +171,7 @@ class _HomeViewState extends State<HomeView> {
                       ),
                     ),
                     onPressed: () {
-                      // Add new target currency
-                      setState(() {
-                        _selectedTargetCurrencies.add("GBP");
-                      });
+                      _showAddConverterDialog(context, state.currencies.keys.toList());
                     },
                     child: const Text(
                       "+ ADD CONVERTER",
@@ -189,6 +179,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ),
                 ),
+
               ],
             ),
           );
@@ -196,4 +187,64 @@ class _HomeViewState extends State<HomeView> {
       ),
     );
   }
+  void _showAddConverterDialog(BuildContext context, List<String> availableCurrencies) {
+    String? selectedCurrency;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.grey[900],
+          title: const Text(
+            "Select Currency",
+            style: TextStyle(color: Colors.white),
+          ),
+          content: DropdownButton<String>(
+            dropdownColor: Colors.grey[800],
+            hint: const Text("Choose Currency", style: TextStyle(color: Colors.white)),
+            value: selectedCurrency,
+            isExpanded: true,
+            items: availableCurrencies.map((currency) {
+              return DropdownMenuItem<String>(
+                value: currency,
+                child: Text(
+                  currency,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              );
+            }).toList(),
+            onChanged: (value) {
+              setState(() {
+                selectedCurrency = value;
+              });
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close dialog
+              },
+              child: const Text("Cancel", style: TextStyle(color: Colors.red)),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+              onPressed: () {
+                if (selectedCurrency != null) {
+                  setState(() {
+                    // Add the selected currency to the target list
+                    // if (!state.preferredCurrencies.contains(selectedCurrency)) {
+                      context.read<HomeBloc>().add(AddPreferredCurrency(selectedCurrency!));
+                    // }
+                  });
+                  Navigator.pop(context); // Close the dialog
+                }
+              },
+              child: const Text("Add", style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }
