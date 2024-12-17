@@ -19,16 +19,19 @@ This project uses feature-based clean architecture for the following reasons:
 
 1. Separation of Concerns:
    - UI (Presentation), State Management (Bloc), and Data are isolated, ensuring clean and maintainable code.
-   Modularity:
-
-2. Each feature (features.convertor) has its own widgets, bloc, data, and presentation folders, making it easier to scale and add new features.
-Reusability:
-    - Shared constants, utilities, and widgets reside in the core folder, reducing duplication and promoting reusability.
-State Management:
-
-3. The Bloc pattern separates the business logic from the UI, providing predictable state transitions.
-Testability:
-    - The architecture is designed to be test-friendly as each layer (data, bloc, UI) is independent.
+   
+2. Modularity:
+   - Each feature (features.convertor) has its own widgets, bloc, data, and presentation folders, making it easier to scale and add new features.
+   
+3. Reusability:
+   - Shared constants, utilities, and widgets reside in the core folder, reducing duplication and promoting reusability.
+   
+4. State Management:
+   - The Bloc pattern separates the business logic from the UI, providing predictable state transitions.
+   
+5. Testability:
+   - The architecture is designed to be test-friendly as each layer (data, bloc, UI) is independent.
+   
 
 ## Installation
 
